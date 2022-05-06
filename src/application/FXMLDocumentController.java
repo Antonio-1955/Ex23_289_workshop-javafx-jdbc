@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
  */
-package ex23_289_workshop.javafx.jdbc;
+package application;
 
 import java.net.URL;
 import java.util.ResourceBundle;
