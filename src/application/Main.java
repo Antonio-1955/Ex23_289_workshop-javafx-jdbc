@@ -14,7 +14,14 @@ import javafx.stage.Stage;
  * @author anton
  */
 public class Main extends Application {
+    
+    //Atributo para guardar a referência
+    private static Scene mainScene;
+//=============================================================================    
 
+      /* Código gerado automaticamente na criação da classe e substituído pelo
+       * correspondente abaixo
+       */
 //    @Override
 //    public void start(Stage stage) throws Exception {
 //        Parent root = FXMLLoader.load(getClass().getResource("/gui/MainView.fxml"));
@@ -24,6 +31,7 @@ public class Main extends Application {
 //        stage.setScene(scene);
 //        stage.show();
 //    }
+//==============================================================================    
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -35,7 +43,7 @@ public class Main extends Application {
             scrollPane.setFitToHeight(true); //(?)Não vi diferença
             scrollPane.setFitToWidth(true);
             
-            Scene mainScene = new Scene(scrollPane);
+            mainScene = new Scene(scrollPane);
             primaryStage.setScene(mainScene);
             primaryStage.setTitle("Sample JavaFX application");
             primaryStage.show();
@@ -43,6 +51,13 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
+//==============================================================================
+
+    //Método para pegar a referência
+    public static Scene getMainScene() {
+        return mainScene;
+    }
+//=============================================================================    
 
     public static void main(String[] args) {
         launch(args);
