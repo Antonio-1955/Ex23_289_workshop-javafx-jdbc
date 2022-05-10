@@ -7,6 +7,7 @@ import gui.util.Alerts;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -39,14 +40,18 @@ public class MainViewController implements Initializable {
     @FXML
     public void onMenuItemDepartmentAction() {
         //System.out.println("Clicou em 'onMenuItemDepartmentAction'");
-        //loadView("/gui/DepartmentList.fxml");
-        loadView2("/gui/DepartmentList.fxml");
+        
+        loadView("/gui/DepartmentList.fxml", (DepartmentListController controller) -> {
+            controller.setDepartmentService(new DepartmentService());
+            controller.updateTableView();});
+        
+        //loadView2("/gui/DepartmentList.fxml");
     }
 
     @FXML
     public void onMenuItemAboutAction() {
         //System.out.println("Clicou em 'onMenuItemAboutAction'");
-        loadView("/gui/About.fxml");
+        loadView("/gui/About.fxml", x -> {});
     }
 //==============================================================================
 
@@ -60,34 +65,7 @@ public class MainViewController implements Initializable {
     /* A palavra 'synchronized' abaixo garante que todo o processamento não seja 
      * interrrompido visto que a aplicação gráfica é 'Multithreading' (várias
      * threads executando ao mesmo tempo)*/
-    private synchronized void loadView(String absoluteName) {
-
-        try {
-            //Carregar a tela
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-            //Variável 'newVBox' do tipo classe Vbox
-            VBox newVBox = loader.load();
-
-            /* Mostrar essa view dentro da janela principal é preciso pegar uma 
-         * referência da cena*/
-            Scene mainScene = Main.getMainScene();
-            VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent(); // Pega o primeiro elemento da view
-
-            Node mainMenu = mainVBox.getChildren().get(0);
-            mainVBox.getChildren().clear();
-            mainVBox.getChildren().add(mainMenu);
-            mainVBox.getChildren().addAll(newVBox.getChildren());
-
-        } catch (IOException e) {
-            Alerts.showAlerts("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
-        }
-    }
-//==============================================================================
-
-    /* A palavra 'synchronized' abaixo garante que todo o processamento não seja 
-     * interrrompido visto que a aplicação gráfica é 'Multithreading' (várias
-     * threads executando ao mesmo tempo)*/
-    private synchronized void loadView2(String absoluteName) {
+    private synchronized <T> void loadView(String absoluteName, Consumer<T> initializingAction) {
 
         try {
             //Carregar a tela
@@ -105,12 +83,42 @@ public class MainViewController implements Initializable {
             mainVBox.getChildren().add(mainMenu);
             mainVBox.getChildren().addAll(newVBox.getChildren());
             
-            DepartmentListController controller = loader.getController();
-            controller.setDepartmentService(new DepartmentService());
-            controller.updateTableView();
+            T controller = loader.getController();
+            initializingAction.accept(controller);
 
         } catch (IOException e) {
             Alerts.showAlerts("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
         }
     }
+//==============================================================================
+
+//    /* A palavra 'synchronized' abaixo garante que todo o processamento não seja 
+//     * interrrompido visto que a aplicação gráfica é 'Multithreading' (várias
+//     * threads executando ao mesmo tempo)*/
+//    private synchronized void loadView2(String absoluteName) {
+//
+//        try {
+//            //Carregar a tela
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+//            //Variável 'newVBox' do tipo classe Vbox
+//            VBox newVBox = loader.load();
+//
+//            /* Mostrar essa view dentro da janela principal é preciso pegar uma 
+//         * referência da cena*/
+//            Scene mainScene = Main.getMainScene();
+//            VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent(); // Pega o primeiro elemento da view
+//
+//            Node mainMenu = mainVBox.getChildren().get(0);
+//            mainVBox.getChildren().clear();
+//            mainVBox.getChildren().add(mainMenu);
+//            mainVBox.getChildren().addAll(newVBox.getChildren());
+//            
+//            DepartmentListController controller = loader.getController();
+//            controller.setDepartmentService(new DepartmentService());
+//            controller.updateTableView();
+//
+//        } catch (IOException e) {
+//            Alerts.showAlerts("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
+//        }
+//    }
 }
