@@ -17,6 +17,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.DepartmentService;
 
 public class MainViewController implements Initializable {
 
@@ -38,7 +39,8 @@ public class MainViewController implements Initializable {
     @FXML
     public void onMenuItemDepartmentAction() {
         //System.out.println("Clicou em 'onMenuItemDepartmentAction'");
-        loadView("/gui/DepartmentList.fxml");
+        //loadView("/gui/DepartmentList.fxml");
+        loadView2("/gui/DepartmentList.fxml");
     }
 
     @FXML
@@ -59,27 +61,56 @@ public class MainViewController implements Initializable {
      * interrrompido visto que a aplicação gráfica é 'Multithreading' (várias
      * threads executando ao mesmo tempo)*/
     private synchronized void loadView(String absoluteName) {
-        
+
         try {
-        //Carregar a tela
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-        //Variável 'newVBox' do tipo classe Vbox
-        VBox newVBox = loader.load();
-        
-        /* Mostrar essa view dentro da janela principal é preciso pegar uma 
-         * referência da cena*/ 
-        Scene mainScene = Main.getMainScene();
-        VBox mainVBox = (VBox) ((ScrollPane)mainScene.getRoot()).getContent(); // Pega o primeiro elemento da view
-        
-        Node mainMenu = mainVBox.getChildren().get(0);
-        mainVBox.getChildren().clear();
-        mainVBox.getChildren().add(mainMenu);
-        mainVBox.getChildren().addAll(newVBox.getChildren());
-        
-        }
-        catch (IOException e) {
+            //Carregar a tela
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            //Variável 'newVBox' do tipo classe Vbox
+            VBox newVBox = loader.load();
+
+            /* Mostrar essa view dentro da janela principal é preciso pegar uma 
+         * referência da cena*/
+            Scene mainScene = Main.getMainScene();
+            VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent(); // Pega o primeiro elemento da view
+
+            Node mainMenu = mainVBox.getChildren().get(0);
+            mainVBox.getChildren().clear();
+            mainVBox.getChildren().add(mainMenu);
+            mainVBox.getChildren().addAll(newVBox.getChildren());
+
+        } catch (IOException e) {
             Alerts.showAlerts("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
         }
     }
+//==============================================================================
 
+    /* A palavra 'synchronized' abaixo garante que todo o processamento não seja 
+     * interrrompido visto que a aplicação gráfica é 'Multithreading' (várias
+     * threads executando ao mesmo tempo)*/
+    private synchronized void loadView2(String absoluteName) {
+
+        try {
+            //Carregar a tela
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            //Variável 'newVBox' do tipo classe Vbox
+            VBox newVBox = loader.load();
+
+            /* Mostrar essa view dentro da janela principal é preciso pegar uma 
+         * referência da cena*/
+            Scene mainScene = Main.getMainScene();
+            VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent(); // Pega o primeiro elemento da view
+
+            Node mainMenu = mainVBox.getChildren().get(0);
+            mainVBox.getChildren().clear();
+            mainVBox.getChildren().add(mainMenu);
+            mainVBox.getChildren().addAll(newVBox.getChildren());
+            
+            DepartmentListController controller = loader.getController();
+            controller.setDepartmentService(new DepartmentService());
+            controller.updateTableView();
+
+        } catch (IOException e) {
+            Alerts.showAlerts("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
+        }
+    }
 }
