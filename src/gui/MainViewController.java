@@ -74,7 +74,7 @@ public class MainViewController implements Initializable {
             VBox newVBox = loader.load();
 
             /* Mostrar essa view dentro da janela principal é preciso pegar uma 
-         * referência da cena*/
+             * referência da cena*/
             Scene mainScene = Main.getMainScene();
             VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent(); // Pega o primeiro elemento da view
 
@@ -87,7 +87,7 @@ public class MainViewController implements Initializable {
             initializingAction.accept(controller);
 
         } catch (IOException e) {
-            Alerts.showAlerts("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
+            Alerts.showAlerts("IO Exception", "Error loading view-1", e.getMessage(), AlertType.ERROR);
         }
     }
 //==============================================================================
