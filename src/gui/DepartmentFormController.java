@@ -10,8 +10,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import model.entities.Department;
 
 public class DepartmentFormController implements Initializable {
+//==============================================================================
+    
+    //Atributo para criar uma dependência com a classe Department do pacote model.entities.
+    private Department entity;
 //============================================================================== 
     
     //Atributos dos controles
@@ -25,6 +30,12 @@ public class DepartmentFormController implements Initializable {
     private Button btSave;
     @FXML
     private Button btCancel;
+//==============================================================================  
+    
+    //Método Set para que o controlador tenha uma instância do 'Departmen'.
+    public void setDepartment(Department entity){
+        this.entity = entity;
+    }
 //==============================================================================  
     
     //Métodos para tratar os eventos dos botões.
@@ -48,6 +59,18 @@ public class DepartmentFormController implements Initializable {
     private void initializeNodes(){
         Constraints.setTextFieldInteger(txtId);
         Constraints.setTextFieldMaxLength(txtName, 30);
+    }
+//============================================================================== 
+    
+    //Método responsável por pegar os dados do 'Department' e popular as caixas de texto do formulário.
+    public void updateFormData(){
+        
+        //Programação defensiva p/ testar se o 'entity' é nullo.
+        if (entity == null) {
+            throw new IllegalStateException("Entity estava nulo.");
+        }
+        txtId.setText(String.valueOf(entity.getId()));
+        txtName.setText(entity.getName());
     }
 //==============================================================================    
     

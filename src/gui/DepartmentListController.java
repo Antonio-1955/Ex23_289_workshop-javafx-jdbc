@@ -57,7 +57,9 @@ public class DepartmentListController implements Initializable {
     public void onBtNewAction(ActionEvent event) {
         
         Stage parentStage = Utils.currentStage(event);
-        createDialogForm("/gui/DepartmentForm.fxml", parentStage);
+        //Instancia um Department vazio
+        Department obj = new Department();
+        createDialogForm(obj, "/gui/DepartmentForm.fxml", parentStage);
     }
 //============================================================================== 
 
@@ -100,12 +102,16 @@ public class DepartmentListController implements Initializable {
 //==============================================================================
 
     //Método recebe como parâmetro uma referência para o Stage da janela que criou a janela de diálogo.
-    private void createDialogForm(String absoluteName, Stage parentStage) {
+    private void createDialogForm(Department obj, String absoluteName, Stage parentStage) {
         
         try {
             //Carregar a tela
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             Pane pane = loader.load();
+            
+            DepartmentFormController controller = loader.getController();
+            controller.setDepartment(obj);
+            controller.updateFormData();
             
             /*Quando vai se carregar uma janela modal na frente de uma 
              *janela existente é preciso instanciar um novo stage (palco), o que
