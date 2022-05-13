@@ -24,6 +24,18 @@ public class DepartmentService {
 //        list.add(new Department(3, "Electronics"));
 //        return list;
     }
+//==============================================================================  
+    
+    //Método p/ verificar se é preciso inserir ou atualizar um department no BD. 
+    public void saveOrUpdate(Department obj){
+        
+        if (obj.getId() == null){
+            dao.insert(obj);
+        }
+        else {
+            dao.update(obj);
+        }
+    }
 //==============================================================================    
     
 }

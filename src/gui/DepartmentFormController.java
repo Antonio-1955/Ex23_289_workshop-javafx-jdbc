@@ -2,21 +2,29 @@
  * Esta classe controla os eventos do formulário Department*/
 package gui;
 
+import db.DbException;
+import gui.util.Alerts;
 import gui.util.Constraints;
+import gui.util.Utils;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Department;
+import model.services.DepartmentService;
 
 public class DepartmentFormController implements Initializable {
 //==============================================================================
     
     //Atributo para criar uma dependência com a classe Department do pacote model.entities.
     private Department entity;
+    private DepartmentService service;
 //============================================================================== 
     
     //Atributos dos controles
@@ -32,19 +40,54 @@ public class DepartmentFormController implements Initializable {
     private Button btCancel;
 //==============================================================================  
     
-    //Método Set para que o controlador tenha uma instância do 'Departmen'.
+    //Método Set para que o controlador tenha uma instância do 'Department'.
     public void setDepartment(Department entity){
         this.entity = entity;
     }
+//============================================================================== 
+    
+    //Método Set para...
+    public void setDepartmentService(DepartmentService service){
+        this.service = service;
+    }
 //==============================================================================  
     
-    //Métodos para tratar os eventos dos botões.
-    public void onBtSaveAction(){
-        System.out.println("Você clicou no botão 'SAVE'.");
+    //Métodos para tratar o evento do botão 'Save'.
+    public void onBtSaveAction(ActionEvent event){
+        
+        if (entity == null){
+            throw new IllegalStateException("Entidade estava nula.");
+        }
+        if (service == null){
+            throw new IllegalStateException("Serviço estava nullo.");
+        }
+        try {
+            entity = getFormData();
+            service.saveOrUpdate(entity);
+            
+            //Fechar a janela
+            Utils.currentStage(event).close();
+        } 
+        catch (DbException e) {
+            Alerts.showAlerts("Erro al salvar o objeto", null, e.getMessage(), AlertType.ERROR);
+        }
+        
+    }
+//==============================================================================    
+
+    private Department getFormData() {
+        
+        Department obj = new Department();
+        obj.setId(Utils.tryParseToInt(txtId.getText()));
+        obj.setName(txtName.getText());
+        
+        return obj;
     }
     
-    public void onBtCancelAction(){
-        System.out.println("Você clicou no botão 'CANCEL'.");
+//==============================================================================    
+    
+    public void onBtCancelAction(ActionEvent event){
+        Utils.currentStage(event).close();
     }
 //==============================================================================    
 
@@ -72,6 +115,6 @@ public class DepartmentFormController implements Initializable {
         txtId.setText(String.valueOf(entity.getId()));
         txtName.setText(entity.getName());
     }
-//==============================================================================    
+
     
 }
