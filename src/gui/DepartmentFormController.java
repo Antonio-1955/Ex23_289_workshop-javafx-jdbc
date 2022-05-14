@@ -3,15 +3,17 @@
 package gui;
 
 import db.DbException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,6 +27,10 @@ public class DepartmentFormController implements Initializable {
     //Atributo para criar uma dependência com a classe Department do pacote model.entities.
     private Department entity;
     private DepartmentService service;
+//============================================================================== 
+    
+    //Instacia uma lista que guarda os objetos interessados em receber o evento.
+    private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 //============================================================================== 
     
     //Atributos dos controles
@@ -50,6 +56,13 @@ public class DepartmentFormController implements Initializable {
     public void setDepartmentService(DepartmentService service){
         this.service = service;
     }
+//============================================================================== 
+    
+    //Método para inscrever (adicionar) um 'listener' na lista.
+    public void subscribeDataChangeListener(DataChangeListener listener){
+        
+        dataChangeListeners.add(listener);
+    }
 //==============================================================================  
     
     //Métodos para tratar o evento do botão 'Save'.
@@ -65,6 +78,9 @@ public class DepartmentFormController implements Initializable {
             entity = getFormData();
             service.saveOrUpdate(entity);
             
+            //Chama o método para notificar os 'listeners'.
+            notifyDataChangeListeners();
+            
             //Fechar a janela
             Utils.currentStage(event).close();
         } 
@@ -72,6 +88,18 @@ public class DepartmentFormController implements Initializable {
             Alerts.showAlerts("Erro al salvar o objeto", null, e.getMessage(), AlertType.ERROR);
         }
         
+    }
+//============================================================================== 
+    
+    //Método para notificar os 'listeners'.
+    private void notifyDataChangeListeners() {
+        
+        /* Para cada 'DataChangeListener' pertencente (:) à lista 
+         * dataChangeListeners, chama o método 'onDataChanged' da 
+         * interface 'DataChangeListener' */
+        for (DataChangeListener listener : dataChangeListeners){
+            listener.onDataChanged();
+        }
     }
 //==============================================================================    
 
@@ -115,6 +143,8 @@ public class DepartmentFormController implements Initializable {
         txtId.setText(String.valueOf(entity.getId()));
         txtName.setText(entity.getName());
     }
+
+    
 
     
 }
