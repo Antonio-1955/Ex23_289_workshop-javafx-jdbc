@@ -38,4 +38,9 @@ public class DepartmentService {
     }
 //==============================================================================    
     
+    //Método para remover um 'Department'.
+    public void remove(Department obj){
+        
+        dao.deleteById(obj.getId());
+    }
 }
