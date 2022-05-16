@@ -8,4 +8,5 @@ public interface DataChangeListener {
     
     //Método
     void onDataChanged();
+    
 }
