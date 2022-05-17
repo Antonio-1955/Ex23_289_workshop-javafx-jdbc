@@ -13,12 +13,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import model.services.DepartmentService;
+import model.services.SellerService;
 
 public class MainViewController implements Initializable {
 
@@ -31,23 +31,26 @@ public class MainViewController implements Initializable {
     private MenuItem menuItemAbout;
 //==============================================================================    
 
-    //Métodos para tratar os itens de menu
+    //Método para tratar os itens de onMenuItemSellerAction()
     @FXML
     public void onMenuItemSellerAction() {
-        System.out.println("Clicou em 'onMenuItemSellerAction'");
+        loadView("/gui/SellerList.fxml", (SellerListController controller) -> {
+            controller.setSellerService(new SellerService());
+            controller.updateTableView();});
     }
+//==============================================================================    
 
+     //Método para tratar os itens de onMenuItemDepartmentAction()
     @FXML
     public void onMenuItemDepartmentAction() {
-        //System.out.println("Clicou em 'onMenuItemDepartmentAction'");
         
         loadView("/gui/DepartmentList.fxml", (DepartmentListController controller) -> {
             controller.setDepartmentService(new DepartmentService());
             controller.updateTableView();});
-        
-        //loadView2("/gui/DepartmentList.fxml");
     }
+//==============================================================================    
 
+    //Método para tratar os itens de onMenuItemAboutAction()
     @FXML
     public void onMenuItemAboutAction() {
         //System.out.println("Clicou em 'onMenuItemAboutAction'");
