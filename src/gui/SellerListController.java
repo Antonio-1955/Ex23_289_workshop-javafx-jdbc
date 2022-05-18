@@ -131,40 +131,40 @@ public class SellerListController implements Initializable, DataChangeListener {
 
     //Método recebe como parâmetro uma referência para o Stage da janela que criou a janela de diálogo.
     private void createDialogForm(Seller obj, String absoluteName, Stage parentStage) {
-//
-//        try {
-//            //Carregar a tela
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-//            Pane pane = loader.load();
-//
-//            SellerFormController controller = loader.getController();
-//            controller.setSeller(obj);
-//            controller.setSellerService(new SellerService());
-//            controller.subscribeDataChangeListener(this);
-//            controller.updateFormData();
-//
-//            /*Quando vai se carregar uma janela modal na frente de uma 
-//             *janela existente é preciso instanciar um novo stage (palco), o que
-//             *resulta em um state à frente de outro*/
-//            Stage dialogStage = new Stage();
-//
-//            //Configura o título da janela
-//            dialogStage.setTitle("Enter Seller data");
-//            //Configura uma nova cena para o novo stage
-//            dialogStage.setScene(new Scene(pane));
-//            //Configura para que a janela não possa ser redimensionada.
-//            dialogStage.setResizable(false);
-//            //Configura o stage pai da janela
-//            dialogStage.initOwner(parentStage);
-//            //Configura o comportamento da janela se vai ser do tipo modal ou não.
-//            dialogStage.initModality(Modality.WINDOW_MODAL);
-//            //Configura a janela para exibir e esperar.
-//            dialogStage.showAndWait();
-//
-//        } catch (IOException e) {
-//            Alerts.showAlerts("IO Exception", "ERRO AO CARREGAR A TELA", e.getMessage(), AlertType.ERROR);
-//
-//        }
+
+        try {
+            //Carregar a tela
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            Pane pane = loader.load();
+
+            SellerFormController controller = loader.getController();
+            controller.setSeller(obj);
+            controller.setSellerService(new SellerService());
+            controller.subscribeDataChangeListener(this);
+            controller.updateFormData();
+
+            /*Quando vai se carregar uma janela modal na frente de uma 
+             *janela existente é preciso instanciar um novo stage (palco), o que
+             *resulta em um state à frente de outro*/
+            Stage dialogStage = new Stage();
+
+            //Configura o título da janela
+            dialogStage.setTitle("Enter Seller data");
+            //Configura uma nova cena para o novo stage
+            dialogStage.setScene(new Scene(pane));
+            //Configura para que a janela não possa ser redimensionada.
+            dialogStage.setResizable(false);
+            //Configura o stage pai da janela
+            dialogStage.initOwner(parentStage);
+            //Configura o comportamento da janela se vai ser do tipo modal ou não.
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            //Configura a janela para exibir e esperar.
+            dialogStage.showAndWait();
+
+        } catch (IOException e) {
+            Alerts.showAlerts("IO Exception", "ERRO AO CARREGAR A TELA", e.getMessage(), AlertType.ERROR);
+
+        }
 
     }
 //==============================================================================    

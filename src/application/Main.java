@@ -9,10 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 
-/**
- *
- * @author anton
- */
 public class Main extends Application {
     
     //Atributo para guardar a referência
