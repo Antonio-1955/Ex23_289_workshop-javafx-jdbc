@@ -1,5 +1,6 @@
 /* Projeto: Ex23_289_workshop-javafx-jdbc 
  * Esta classe controla os eventos do formulário Seller*/
+//Parei vídeo na posição 4:31 - loadAssociatedObjects 
 package gui;
 
 import db.DbException;
@@ -28,13 +29,25 @@ import model.exception.ValidationException;
 import model.services.SellerService;
 
 import java.util.Locale;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.util.Callback;
+import model.entities.Department;
+import model.services.DepartmentService;
 
 public class SellerFormController implements Initializable {
 //==============================================================================
     
-    //Atributo para criar uma dependência com a classe Seller do pacote model.entities.
+    //Atributos para criar uma dependência com a classe Seller do pacote model.entities.
     private Seller entity;
     private SellerService service;
+//==============================================================================
+
+    //Atributo para criar uma dependência com a classe Department do pacote model.entities.
+    private DepartmentService departmentService;
 //============================================================================== 
     
     //Instacia uma lista que guarda os objetos interessados em receber o evento.
@@ -57,6 +70,10 @@ public class SellerFormController implements Initializable {
     private TextField txtBaseSalary;
     
     @FXML
+    //Atributo 'ComboBox' cujos objetos serão do tipo <Department>.
+    private ComboBox<Department> comboBoxDepartment;
+    
+    @FXML
     private Label labelErrorName;
     
     @FXML
@@ -72,6 +89,9 @@ public class SellerFormController implements Initializable {
     private Button btSave;
     @FXML
     private Button btCancel;
+    
+    //@FXML
+    private ObservableList<Department> obsList;
 //==============================================================================  
     
     //Método Set para que o controlador tenha uma instância do 'Seller'.
@@ -80,9 +100,10 @@ public class SellerFormController implements Initializable {
     }
 //============================================================================== 
     
-    //Método Set para...
-    public void setSellerService(SellerService service){
+    //Método Set para injetar o SellerService.
+    public void setServices(SellerService service, DepartmentService departmentService){
         this.service = service;
+        this.departmentService = departmentService;
     }
 //============================================================================== 
     
@@ -178,6 +199,8 @@ public class SellerFormController implements Initializable {
         Constraints.setTextFieldDouble(txtBaseSalary);
         Constraints.setTextFieldMaxLength(txtEmail, 60);
         Utils.formatDatePicker(dpBirthDate, "dd/MM/yyyy");
+        
+        initializeComboBoxDepartment();
     }
 //============================================================================== 
     
@@ -198,6 +221,23 @@ public class SellerFormController implements Initializable {
         if (entity.getBirthDate() != null){
             dpBirthDate.setValue(LocalDateTime.ofInstant(entity.getBirthDate().toInstant(), ZoneId.systemDefault()).toLocalDate());
         }
+        if (entity.getDepartent() == null){
+           comboBoxDepartment.getSelectionModel().selectFirst();
+        }
+        else {
+        comboBoxDepartment.setValue(entity.getDepartent());
+        }
+    }
+//==============================================================================
+    
+    //Método
+    public void loadAssociatedObjects(){
+        if (departmentService == null){
+            throw new IllegalStateException("DepartmentService estava null.");
+        }
+        List<Department> list = departmentService.findAll();
+        obsList = FXCollections.observableArrayList(list);
+        comboBoxDepartment.setItems(obsList);
     }
 //==============================================================================
     
@@ -209,5 +249,18 @@ public class SellerFormController implements Initializable {
             labelErrorName.setText(errors.get("name"));
         }
     }
-    
+//==============================================================================
+
+    private void initializeComboBoxDepartment(){
+        
+        Callback<ListView<Department>, ListCell<Department>> factory = lv -> new ListCell<Department>(){
+            @Override
+            protected void updateItem(Department item, boolean empty){
+                super.updateItem(item, empty);
+                setText(empty ? "" : item.getName());
+            }
+        };
+        comboBoxDepartment.setCellFactory(factory);
+        comboBoxDepartment.setButtonCell(factory.call(null));
+    }
 }
