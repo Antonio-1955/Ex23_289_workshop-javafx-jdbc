@@ -29,7 +29,7 @@ public class Utils {
     }
 //==============================================================================
 
-    //Método p/ converter string p/ inteiro.
+    //Método p/ converter string p/ Integer.
     public static Integer tryParseToInt(String str) {
 
         try {
@@ -37,7 +37,17 @@ public class Utils {
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+//==============================================================================
+    
+    //Método p/ converter string p/ Double.
+    public static Double tryParseToDouble(String str) {
 
+        try {
+            return Double.parseDouble(str);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 //==============================================================================
 
